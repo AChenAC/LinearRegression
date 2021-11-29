@@ -4,7 +4,7 @@
 \alias{LR}
 \title{Linear Regression}
 \usage{
-LR(formula, data, include.intercept = TRUE)
+LR(formula, data, include.intercept = TRUE, to.predict = NULL)
 }
 \arguments{
 \item{formula}{An object of class "formula": a symbolic description of the model to be fitted. A typical model has the form outcome ~ covariates
@@ -14,6 +14,9 @@ where outcome is the numeric response vector (which people usually denote as Y i
 
 \item{include.intercept}{If the model should fit with intercept, include.intercept = TRUE; if model should fit without intercept,
 then include.intercept = FALSE. The default setting for include.intercept is TRUE.}
+
+\item{to.predict}{The default argument is set to NULL. If wants to use the current model for prediction, enter a n by p matrix (or object coercible by as.matrix to a matrix) to obtain predicted values.
+n is the number of prediction desired, p is the number of covariates included in the model.}
 }
 \value{
 LR does not explicitly return anything unless extract the value with $ followed with the name of desired output.
@@ -28,8 +31,9 @@ The returned output is a list containing at least the following components:
   \item{R_squared}{the proportion of the variance for a dependent variable that's explained by independent variable(s)}
   \item{adj_R_squared}{a penalized version of R_squared}
   \item{CI}{95\% confidence interval of estimates (i.e. coefficients)}
-  \item{fstatistic}{Give the overall F statistic and its corresponding degrees of freedom}
+  \item{fstatistic}{Give the overall F statistic and its corresponding degrees of freedom of numerator and denominator}
   \item{p_value_F_test}{p-value for overall F test}
+  \item{predicted}{Give the predicted value using the current fitted model}
 }
 }
 \description{
@@ -43,5 +47,6 @@ LR(mpg ~ cyl + wt, mtcars)$sigma ## Obtain residual standard error
 LR(mpg ~ cyl + wt + qsec, mtcars)$CI ## Obtain 95\% confidence interval
 LR(mpg ~ cyl + wt, mtcars, include.intercept = FALSE) ## omitting intercept
 LR(mpg ~ cyl + wt + qsec + disp, mtcars, include.intercept = FALSE)$df ## Extract degrees of freedom when fitting a model without an intercept
+LR(cyl~mpg+wt, mtcars, to.predict = matrix(c(mean(mtcars$mpg), mean(mtcars$wt)), 1, 2))$predicted
 
 }

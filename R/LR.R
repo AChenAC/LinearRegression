@@ -10,6 +10,9 @@
 #' @param include.intercept If the model should fit with intercept, include.intercept = TRUE; if model should fit without intercept,
 #' then include.intercept = FALSE. The default setting for include.intercept is TRUE.
 #'
+#' @param to.predict The default argument is set to NULL. If wants to use the current model for prediction, enter a n by p matrix (or object coercible by as.matrix to a matrix) to obtain predicted values.
+#' n is the number of prediction desired, p is the number of covariates included in the model.
+#'
 #' @return LR does not explicitly return anything unless extract the value with $ followed with the name of desired output.
 #' The returned output is a list containing at least the following components:
 #' \describe{
@@ -22,8 +25,9 @@
 #'   \item{R_squared}{the proportion of the variance for a dependent variable that's explained by independent variable(s)}
 #'   \item{adj_R_squared}{a penalized version of R_squared}
 #'   \item{CI}{95\% confidence interval of estimates (i.e. coefficients)}
-#'   \item{fstatistic}{Give the overall F statistic and its corresponding degrees of freedom}
+#'   \item{fstatistic}{Give the overall F statistic and its corresponding degrees of freedom of numerator and denominator}
 #'   \item{p_value_F_test}{p-value for overall F test}
+#'   \item{predicted}{Give the predicted value using the current fitted model}
 #' }
 #'
 #' @examples
@@ -34,10 +38,12 @@
 #' LR(mpg ~ cyl + wt + qsec, mtcars)$CI ## Obtain 95% confidence interval
 #' LR(mpg ~ cyl + wt, mtcars, include.intercept = FALSE) ## omitting intercept
 #' LR(mpg ~ cyl + wt + qsec + disp, mtcars, include.intercept = FALSE)$df ## Extract degrees of freedom when fitting a model without an intercept
+#' LR(cyl~mpg+wt, mtcars, to.predict = matrix(c(mean(mtcars$mpg), mean(mtcars$wt)), 1, 2))$predicted
 #'
 #' @export
 #'
-LR <- function(formula, data, include.intercept = TRUE){
+#'
+LR = function(formula, data, include.intercept = TRUE, to.predict = NULL){
   CompleteData = na.omit(data)
   n = nrow(CompleteData)
   if(include.intercept==TRUE){
@@ -86,6 +92,17 @@ LR <- function(formula, data, include.intercept = TRUE){
   F_stat_df = c(F_stat, numdf, dendf)
   names(F_stat_df) = c("F statistic", "numdf", "dendf")
   p_val_F = pf(F_stat, numdf, dendf, lower.tail = FALSE)
+  if(!is.null(to.predict)){
+    if(include.intercept == TRUE){
+      predicted = cbind(1, to.predict) %*% beta
+      colnames(predicted) = "Predicted Values"
+    } else {
+      predicted = to.predict %*% beta
+      colnames(predicted) = "Predicted Values"
+    }
+  } else {
+    predicted = NULL
+  }
   results = list(coefficients = beta,
                  residuals = ei,
                  fitted.values = yhat,
@@ -96,7 +113,8 @@ LR <- function(formula, data, include.intercept = TRUE){
                  adj_R_squared = as.vector(R2_adj),
                  CI = CI_95,
                  fstatistic = F_stat_df,
-                 p_value_F_test = p_val_F)
+                 p_value_f_test = as.vector(p_val_F),
+                 predicted = predicted)
   return(invisible(results))
 }
 
