@@ -1,14 +1,17 @@
 #' Linear Regression
 #'
-#' LR is used to fit linear model. It yields the same results as lm(), summary(lm()), and confint() functions.
+#' LR is used to fit linear model. It yields the same results as lm( ), summary(lm( )), and confint( ) functions.
 #'
-#' @param formula An object of class "formula": a symbolic description of the model to be fitted. A typical model has the form outcome ~ covariates where outcome is the numeric response vector (which people usually denote as Y in statistical formula) and covariates are predictor of response.
+#' @param formula An object of class "formula": a symbolic description of the model to be fitted. A typical model has the form outcome ~ covariates
+#' where outcome is the numeric response vector (which people usually denote as Y in statistical formula) and covariates are predictor of response.
 #'
 #' @param data A data frame (or object coercible by as.data.frame to a data frame) containing the variables in the model.
 #'
-#' @param include.intercept If the model should fit with intercept, include.intercept = TRUE; if model should fit without intercept, then include.intercept = FALSE. The default setting for include.intercept is TRUE.
+#' @param include.intercept If the model should fit with intercept, include.intercept = TRUE; if model should fit without intercept,
+#' then include.intercept = FALSE. The default setting for include.intercept is TRUE.
 #'
-#' @return LR does not explicitly return anything unless extract the value with $ followed with the name of desired output. The returned output is a list containing at least the following components:
+#' @return LR does not explicitly return anything unless extract the value with $ followed with the name of desired output.
+#' The returned output is a list containing at least the following components:
 #' \describe{
 #'   \item{coefficients}{a named vector of coefficients}
 #'   \item{residuals}{the residuals (i.e. response minus fitted values)}
@@ -19,6 +22,8 @@
 #'   \item{R_squared}{the proportion of the variance for a dependent variable that's explained by independent variable(s)}
 #'   \item{adj_R_squared}{a penalized version of R_squared}
 #'   \item{CI}{95\% confidence interval of estimates (i.e. coefficients)}
+#'   \item{fstatistic}{Give the overall F statistic and its corresponding degrees of freedom}
+#'   \item{p_value_F_test}{p-value for overall F test}
 #' }
 #'
 #' @examples
@@ -26,8 +31,9 @@
 #' LR(mpg ~ cyl + wt, mtcars)$coefficients ## Obtain beta coefficient estimates
 #' LR(mpg ~ cyl + wt + disp, mtcars)$coeff_summary ## Obtain summary of beta coefficients
 #' LR(mpg ~ cyl + wt, mtcars)$sigma ## Obtain residual standard error
-#' LR(mpg ~ cyl + wt + qsec, mtcars)$CI
+#' LR(mpg ~ cyl + wt + qsec, mtcars)$CI ## Obtain 95% confidence interval
 #' LR(mpg ~ cyl + wt, mtcars, include.intercept = FALSE) ## omitting intercept
+#' LR(mpg ~ cyl + wt + qsec + disp, mtcars, include.intercept = FALSE)$df ## Extract degrees of freedom when fitting a model without an intercept
 #'
 #' @export
 #'
@@ -72,6 +78,14 @@ LR <- function(formula, data, include.intercept = TRUE){
   UB = beta + qt(0.05/2, df, lower.tail = FALSE)*std.error
   CI_95 = cbind(LB, UB)
   colnames(CI_95) = c("2.5%", "97.5%")
+  numdf = p - 1
+  MSR = SSR / numdf
+  dendf = n - p
+  MSE = SSE / dendf
+  F_stat = MSR / MSE
+  F_stat_df = c(F_stat, numdf, dendf)
+  names(F_stat_df) = c("F statistic", "numdf", "dendf")
+  p_val_F = pf(F_stat, numdf, dendf, lower.tail = FALSE)
   results = list(coefficients = beta,
                  residuals = ei,
                  fitted.values = yhat,
@@ -80,7 +94,9 @@ LR <- function(formula, data, include.intercept = TRUE){
                  coeff_summary = Coeff_summary,
                  R_squared = as.vector(R2),
                  adj_R_squared = as.vector(R2_adj),
-                 CI = CI_95)
+                 CI = CI_95,
+                 fstatistic = F_stat_df,
+                 p_value_F_test = p_val_F)
   return(invisible(results))
 }
 

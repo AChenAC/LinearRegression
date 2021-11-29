@@ -8,4 +8,6 @@ test_that("LR works", {
   expect_equal(LR(mpg ~ cyl + wt, mtcars)$adj_R_squared, summary(lm(mpg ~ cyl + wt, mtcars))$adj.r.squared)
   expect_equal(as.numeric(LR(mpg ~ cyl + wt + qsec, mtcars)$CI), as.numeric(confint(lm(mpg ~ cyl + wt + qsec, mtcars))))
   expect_equal(LR(mpg ~ cyl + wt, mtcars, include.intercept = FALSE)$sigma, summary(lm(mpg ~ -1 + cyl + wt, mtcars))$sigma)
+  expect_equal(as.numeric(LR(mpg~cyl+wt, mtcars)$fstatistic), as.numeric(summary(lm(mpg~cyl+wt, mtcars))$fstatistic))
+  expect_equal(as.numeric(LR(mpg~cyl+wt, mtcars)$p_value_F_test), as.numeric(pf(summary(lm(mpg~cyl+wt, mtcars))$fstatistic[1], summary(lm(mpg~cyl+wt, mtcars))$fstatistic[2], summary(lm(mpg~cyl+wt, mtcars))$fstatistic[3], lower.tail = FALSE)))
 })
