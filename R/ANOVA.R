@@ -1,3 +1,0 @@
-ANOVA = function(){
-
-}
