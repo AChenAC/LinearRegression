@@ -51,7 +51,7 @@ LR <- function(formula, data, include.intercept = TRUE){
     colnames(beta) = "Coefficients"
   }
   yhat = X %*% beta ## Fitted Values
-  ei = yhat - Y ## Residuals
+  ei = Y - yhat ## Residuals
   sigma = sqrt((t(ei) %*% ei) / (n-p)) ## sigma
   df = n-p
   var_cov_beta = as.vector((t(ei) %*% ei) / (n-p)) * solve(t(X) %*% X)
@@ -68,8 +68,8 @@ LR <- function(formula, data, include.intercept = TRUE){
   R2 = SSR/SSY
   SSE = t(ei) %*% ei
   R2_adj = 1 - (SSE/(n-p))/(SSY/(n-1))
-  LB = beta - qt(0.05/2, 29, lower.tail = FALSE)*std.error
-  UB = beta + qt(0.05/2, 29, lower.tail = FALSE)*std.error
+  LB = beta - qt(0.05/2, df, lower.tail = FALSE)*std.error
+  UB = beta + qt(0.05/2, df, lower.tail = FALSE)*std.error
   CI_95 = cbind(LB, UB)
   colnames(CI_95) = c("2.5%", "97.5%")
   results = list(coefficients = beta,

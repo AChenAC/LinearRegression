@@ -1,0 +1,10 @@
+test_that("LR works", {
+  expect_equal(as.numeric(LR(mpg ~ cyl + wt, mtcars)$coefficients), as.numeric(lm(mpg ~ cyl + wt, mtcars)$coefficients))
+  expect_equal(as.numeric(LR(mpg ~ cyl + wt, mtcars)$residuals), as.numeric(summary(lm(mpg ~ cyl + wt, mtcars))$residuals))
+  expect_equal(as.numeric(LR(mpg ~ cyl + wt + disp, mtcars)$fitted.values), as.numeric(lm(mpg ~ cyl + wt + disp, mtcars)$fitted.values))
+  expect_equal(LR(mpg ~ cyl + wt, mtcars)$sigma, summary(lm(mpg ~ cyl + wt, mtcars))$sigma)
+  expect_equal(as.numeric(LR(mpg ~ cyl + wt + disp, mtcars)$coeff_summary), as.numeric(summary(lm(mpg ~ cyl + wt + disp, mtcars))$coefficients))
+  expect_equal(LR(mpg ~ cyl + wt, mtcars)$R_squared, summary(lm(mpg ~ cyl + wt, mtcars))$r.squared)
+  expect_equal(LR(mpg ~ cyl + wt, mtcars)$adj_R_squared, summary(lm(mpg ~ cyl + wt, mtcars))$adj.r.squared)
+  expect_equal(as.numeric(LR(mpg ~ cyl + wt + qsec, mtcars)$CI), as.numeric(confint(lm(mpg ~ cyl + wt + qsec, mtcars))))
+})
