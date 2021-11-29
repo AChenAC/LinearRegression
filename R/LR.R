@@ -1,6 +1,6 @@
 #' Linear Regression
 #'
-#' LR is used to fit linear model. It yields the same results as lm( ), summary(lm( )), and confint( ) functions.
+#' LR is used to fit linear model. It yields the same results as lm( ), summary(lm( )), and confint( ) functions. This function can also be used to predict outcome based on fitted model.
 #'
 #' @param formula An object of class "formula": a symbolic description of the model to be fitted. A typical model has the form outcome ~ covariates
 #' where outcome is the numeric response vector (which people usually denote as Y in statistical formula) and covariates are predictor of response.
