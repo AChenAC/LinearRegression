@@ -10,8 +10,8 @@
 #' @param include.intercept If the model should fit with intercept, include.intercept = TRUE; if model should fit without intercept,
 #' then include.intercept = FALSE. The default setting for include.intercept is TRUE.
 #'
-#' @param to.predict The default argument is set to NULL. If wants to use the current model for prediction, enter a n by p matrix (or object coercible by as.matrix to a matrix) to obtain predicted values.
-#' n is the number of prediction desired, p is the number of covariates included in the model.
+#' @param to.predict The default argument is set to NULL. If wants to use the current model for prediction, enter a n by p matrix (or
+#' object coercible by as.matrix to a matrix) to obtain predicted values. n is the number of prediction desired, p is the number of covariates included in the model.
 #'
 #' @return LR does not explicitly return anything unless extract the value with $ followed with the name of desired output.
 #' The returned output is a list containing at least the following components:
