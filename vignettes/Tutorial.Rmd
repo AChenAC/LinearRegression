@@ -46,7 +46,8 @@ all.equal(as.numeric(model$coeff_summary), as.numeric(summary(model.r)$coefficie
 Since we are only interested in whether `LR( )` and `lm( )` yield the same numeric results, I coerced the both outputs to "numeric" class. Through `all.equal( )`, we observed that the outputs are indeed equal. What about the its speed? We would next compare their speed via `bench::mark( )`.
 
 ```{r fig.align ='center', fig.width= 7, fig.height = 5, message=FALSE}
-plot(bench::mark(as.numeric(model$coeff_summary), as.numeric(summary(model.r)$coefficients)))
+library(bench)
+plot(mark(as.numeric(model$coeff_summary), as.numeric(summary(model.r)$coefficients)))
 ```
 
 Using this naive built-in data set `mtcars`, `LR( )` function perform better than `lm( )` function. One of the main reason why `LR(  )` outperforms the built-in `r` function is that there is no need to call for another function for coefficients summary. 
@@ -60,7 +61,7 @@ print(MyPredict)
 RPredict = predict(lm(cyl~mpg+wt,mtcars), newdata=data.frame(mpg=c(mean(mtcars$mpg),18), wt = c(mean(mtcars$wt),4)))
 print(RPredict)
 all.equal(as.numeric(MyPredict), as.numeric(RPredict))
-plot(bench::mark(as.numeric(MyPredict), as.numeric(RPredict)))
+plot(mark(as.numeric(MyPredict), as.numeric(RPredict)))
 ```
 
 Both function yields the same predicted values;however, the built-in `r` function performs slightly better than `LR( )` in terms of speed. 
@@ -72,7 +73,7 @@ model.r2 = lm(mpg ~ -1 + cyl + wt + qsec, mtcars)
 model2$CI
 confint(model.r2)
 all.equal(as.numeric(model2$CI), as.numeric(confint(model.r2)))
-plot(bench::mark(as.numeric(model2$CI), as.numeric(confint(model.r2))))
+plot(mark(as.numeric(model2$CI), as.numeric(confint(model.r2))))
 ```
 
 Again, same numeric outputs from both functions. However, `LR( )` outperforms the built-in `r` function because we do not need to call another function to compute the confidence interval of the fitted model. 
