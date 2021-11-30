@@ -14,6 +14,81 @@ knitr::opts_chunk$set(
 )
 ```
 
+The LinearRegression package aims to provide almost every piece of information needed for linear regression, except diagnostic. The `LR( )` function mimics the output from `lm( )`, `summary(lm( ))`, `confint( )`, `hatvalues(lm( ))`, `rstandard( )`, and `rstudent( )`. 
+
 ```{r setup}
 library(LinearRegression)
 ```
+
+Let's first demonstrate a few example of the use of `LR( )`.
+
+```{r}
+LR(mpg ~ cyl + wt, mtcars)
+LR(mpg ~ cyl + wt, mtcars, include.intercept = FALSE)
+```
+
+You can either fit the linear regression model with or without the intercept. The `LR( )` function does not explicitly return any result until you extract the desired output with `$`. 
+
+```{r}
+model = LR(mpg ~ cyl + wt + qsec, mtcars)
+names(model)
+```
+
+The `LR( )` function is very versatile, it contains lots of information. We can choose from above to obtain the desired output. Let's demonstrate via a few examples and compare the result with the original r function to see if they yields the same results. 
+
+```{r}
+model$coeff_summary
+model.r = lm(mpg ~ cyl + wt + qsec, mtcars)
+summary(model.r)$coefficients
+all.equal(as.numeric(model$coeff_summary), as.numeric(summary(model.r)$coefficients))
+```
+
+Since we are only interested in whether `LR( )` and `lm( )` yield the same numeric results, I coerced the both outputs to "numeric" class. Through `all.equal( )`, we observed that the outputs are indeed equal. What about the its speed? We would next compare their speed via `bench::mark( )`.
+
+```{r fig.align ='center', fig.width= 7, fig.height = 5, message=FALSE}
+plot(bench::mark(as.numeric(model$coeff_summary), as.numeric(summary(model.r)$coefficients)))
+```
+
+Using this naive built-in data set `mtcars`, `LR( )` function perform better than `lm( )` function. One of the main reason why `LR(  )` outperforms the built-in `r` function is that there is no need to call for another function for coefficients summary. 
+
+Next, let's demonstrate two more example with `LR( )` and compare it with the original `r` function.
+
+_(a)_ Usage of `to.predict` parameter
+```{r fig.align ='center', fig.width= 7, fig.height = 5, message=FALSE}
+MyPredict = LR(cyl ~ mpg + wt, mtcars, to.predict = matrix(c(mean(mtcars$mpg), 18, mean(mtcars$wt), 4), 2, 2))$predicted
+print(MyPredict)
+RPredict = predict(lm(cyl~mpg+wt,mtcars), newdata=data.frame(mpg=c(mean(mtcars$mpg),18), wt = c(mean(mtcars$wt),4)))
+print(RPredict)
+all.equal(as.numeric(MyPredict), as.numeric(RPredict))
+plot(bench::mark(as.numeric(MyPredict), as.numeric(RPredict)))
+```
+
+Both function yields the same predicted values;however, the built-in `r` function performs slightly better than `LR( )` in terms of speed. 
+
+_(b)_ Usage of `include.intercept` parameter
+```{r fig.align ='center', fig.width= 7, fig.height = 5, message=FALSE}
+model2 = LR(mpg ~ cyl + wt + qsec, mtcars, include.intercept = FALSE)
+model.r2 = lm(mpg ~ -1 + cyl + wt + qsec, mtcars)
+model2$CI
+confint(model.r2)
+all.equal(as.numeric(model2$CI), as.numeric(confint(model.r2)))
+plot(bench::mark(as.numeric(model2$CI), as.numeric(confint(model.r2))))
+```
+
+Again, same numeric outputs from both functions. However, `LR( )` outperforms the built-in `r` function because we do not need to call another function to compute the confidence interval of the fitted model. 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
