@@ -46,6 +46,7 @@ all.equal(as.numeric(model$coeff_summary), as.numeric(summary(model.r)$coefficie
 Since we are only interested in whether `LR( )` and `lm( )` yield the same numeric results, I coerced the both outputs to "numeric" class. Through `all.equal( )`, we observed that the outputs are indeed equal. What about the its speed? We would next compare their speed via `bench::mark( )`.
 
 ```{r fig.align ='center', fig.width= 7, fig.height = 5, message=FALSE}
+remotes::install_github("r-lib/bench")
 library(bench)
 plot(mark(as.numeric(model$coeff_summary), as.numeric(summary(model.r)$coefficients)))
 ```
