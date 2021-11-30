@@ -12,4 +12,8 @@ test_that("LR works", {
   expect_equal(as.numeric(LR(mpg~cyl+wt, mtcars)$p_value_f_test), as.numeric(pf(summary(lm(mpg~cyl+wt, mtcars))$fstatistic[1], summary(lm(mpg~cyl+wt, mtcars))$fstatistic[2], summary(lm(mpg~cyl+wt, mtcars))$fstatistic[3], lower.tail = FALSE)))
   expect_equal(as.numeric(LR(cyl~mpg+wt, mtcars, to.predict = matrix(c(mean(mtcars$mpg), mean(mtcars$wt)), 1, 2))$predicted), as.numeric(predict(lm(cyl~mpg+wt,mtcars), newdata=data.frame(mpg=mean(mtcars$mpg), wt = mean(mtcars$wt)), se.fit=TRUE)$fit))
   expect_equal(as.numeric(LR(cyl~mpg+wt, mtcars, include.intercept = FALSE, to.predict = matrix(c(mean(mtcars$mpg), mean(mtcars$wt)), 1, 2))$predicted), as.numeric(predict(lm(cyl~-1+mpg+wt,mtcars), newdata=data.frame(mpg=mean(mtcars$mpg), wt = mean(mtcars$wt)), se.fit=TRUE)$fit))
+  expect_equal(as.numeric(LR(cyl~mpg+wt, mtcars)$standardized_res), as.numeric(lm(cyl~mpg+wt,mtcars)$residuals/summary(lm(cyl~mpg+wt,mtcars))$sigma))
+  expect_equal(LR(mpg~cyl+wt, mtcars)$leverage, as.numeric(hatvalues(lm(mpg~cyl+wt, mtcars))))
+  expect_equal(as.numeric(LR(mpg~cyl+wt, mtcars)$studentized_res), as.numeric(rstandard(lm(mpg~cyl+wt, mtcars))))
+  expect_equal(as.numeric(LR(mpg~cyl+wt, mtcars)$ex_stud_res), as.numeric(rstudent(lm(mpg~cyl+wt, mtcars))))
 })

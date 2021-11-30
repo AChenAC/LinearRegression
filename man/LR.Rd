@@ -15,8 +15,8 @@ where outcome is the numeric response vector (which people usually denote as Y i
 \item{include.intercept}{If the model should fit with intercept, include.intercept = TRUE; if model should fit without intercept,
 then include.intercept = FALSE. The default setting for include.intercept is TRUE.}
 
-\item{to.predict}{The default argument is set to NULL. If wants to use the current model for prediction, enter a n by p matrix (or object coercible by as.matrix to a matrix) to obtain predicted values.
-n is the number of prediction desired, p is the number of covariates included in the model.}
+\item{to.predict}{The default argument is set to NULL. If wants to use the current model for prediction, enter a n by p matrix (or
+object coercible by as.matrix to a matrix) to obtain predicted values. n is the number of prediction desired, p is the number of covariates included in the model.}
 }
 \value{
 LR does not explicitly return anything unless extract the value with $ followed with the name of desired output.
@@ -24,8 +24,12 @@ The returned output is a list containing at least the following components:
 \describe{
   \item{coefficients}{a named vector of coefficients}
   \item{residuals}{the residuals (i.e. response minus fitted values)}
+  \item{standardized_res}{the standardized residuals}
+  \item{studentized_res}{the internally studentized residuals}
+  \item{ex_stud_res}{the externally studentized residuals}
   \item{fitted.values}{the predicted value}
   \item{sigma}{the residual standard error}
+  \item{leverage}{obtain leverage}
   \item{df}{degrees of freedom}
   \item{coeff_summary}{mimic the result from using summary(lm()) which includes estimates of beta coefficients, standard error, t value, and p-value}
   \item{R_squared}{the proportion of the variance for a dependent variable that's explained by independent variable(s)}
@@ -37,7 +41,8 @@ The returned output is a list containing at least the following components:
 }
 }
 \description{
-LR is used to fit linear model. It yields the same results as lm( ), summary(lm( )), and confint( ) functions.
+LR is used to fit linear model. It yields the same results as lm( ), summary(lm( )), confint( ), and hatvalues(lm( )) functions. In addition to the conventional residuals,
+LR also yields standardized residuals, studentized residuals, and externally studentized residuals. Further, this function can also be used to predict outcome based on fitted model.
 }
 \examples{
 

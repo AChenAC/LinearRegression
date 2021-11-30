@@ -1,6 +1,7 @@
 #' Linear Regression
 #'
-#' LR is used to fit linear model. It yields the same results as lm( ), summary(lm( )), and confint( ) functions. This function can also be used to predict outcome based on fitted model.
+#' LR is used to fit linear model. It yields the same results as lm( ), summary(lm( )), confint( ), and hatvalues(lm( )) functions. In addition to the conventional residuals,
+#' LR also yields standardized residuals, studentized residuals, and externally studentized residuals. Further, this function can also be used to predict outcome based on fitted model.
 #'
 #' @param formula An object of class "formula": a symbolic description of the model to be fitted. A typical model has the form outcome ~ covariates
 #' where outcome is the numeric response vector (which people usually denote as Y in statistical formula) and covariates are predictor of response.
@@ -18,8 +19,12 @@
 #' \describe{
 #'   \item{coefficients}{a named vector of coefficients}
 #'   \item{residuals}{the residuals (i.e. response minus fitted values)}
+#'   \item{standardized_res}{the standardized residuals}
+#'   \item{studentized_res}{the internally studentized residuals}
+#'   \item{ex_stud_res}{the externally studentized residuals}
 #'   \item{fitted.values}{the predicted value}
 #'   \item{sigma}{the residual standard error}
+#'   \item{leverage}{obtain leverage}
 #'   \item{df}{degrees of freedom}
 #'   \item{coeff_summary}{mimic the result from using summary(lm()) which includes estimates of beta coefficients, standard error, t value, and p-value}
 #'   \item{R_squared}{the proportion of the variance for a dependent variable that's explained by independent variable(s)}
@@ -64,7 +69,12 @@ LR = function(formula, data, include.intercept = TRUE, to.predict = NULL){
   }
   yhat = X %*% beta ## Fitted Values
   ei = Y - yhat ## Residuals
-  sigma = sqrt((t(ei) %*% ei) / (n-p)) ## sigma
+  sigma = sqrt((t(ei) %*% ei) / (n-p))
+  zi = ei/as.numeric(sigma) ## Standardized residuals
+  H = X %*% solve(t(X) %*% X) %*% t(X)
+  leverage = diag(H)
+  ri = ei/as.numeric(sigma)/sqrt(1-leverage) ## studentized residuals
+  r_i = ri*sqrt((n-p-1)/(n-p-ri^2)) ## Externally studentized residuals
   df = n-p
   var_cov_beta = as.vector((t(ei) %*% ei) / (n-p)) * solve(t(X) %*% X)
   std.error = sqrt(diag(var_cov_beta))
@@ -105,9 +115,14 @@ LR = function(formula, data, include.intercept = TRUE, to.predict = NULL){
   }
   results = list(coefficients = beta,
                  residuals = ei,
+                 standardized_res = zi,
+                 studentized_res = ri,
+                 ex_stud_res = r_i,
                  fitted.values = yhat,
                  sigma = as.vector(sigma),
+                 leverage = leverage,
                  df = df,
+                 rank = p,
                  coeff_summary = Coeff_summary,
                  R_squared = as.vector(R2),
                  adj_R_squared = as.vector(R2_adj),
