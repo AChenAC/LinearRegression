@@ -1,4 +1,5 @@
 test_that("ANOVA works", {
+  library(car)
   expect_equal(as.numeric(unlist(ANOVA(mpg ~ cyl + wt, mtcars, type = "Sequential")["Sum Sq"])) , anova(lm(mpg ~ cyl + wt, mtcars))$"Sum Sq")
   expect_equal(as.numeric(unlist(ANOVA(mpg ~ cyl + wt, mtcars, type = "Sequential")["Df"])) , anova(lm(mpg ~ cyl + wt, mtcars))$"Df")
   expect_equal(as.numeric(unlist(ANOVA(mpg ~ cyl + wt, mtcars, type = "Sequential")["Mean Sq"])) , anova(lm(mpg ~ cyl + wt, mtcars))$"Mean Sq")
