@@ -15,7 +15,8 @@ Suggests:
     rmarkdown,
     testthat (>= 3.0.0),
     car,
-    bench
+    bench,
+    ggbeeswarm
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 LinkingTo: 
