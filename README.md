@@ -11,6 +11,8 @@ The goal of LinearRegression is to mimic the existing R functions that are close
 Run the following code to install the package:
 ```{r}
 install.packages('devtools')
+install.packages("bench")
+install.packages("ggbeeswarm")
 devtools::install_github('AChenAC/LinearRegression', build_vignettes = T)
 library("LinearRegression")
 ```
