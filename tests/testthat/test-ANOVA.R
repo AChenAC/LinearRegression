@@ -8,5 +8,4 @@ test_that("ANOVA works", {
   expect_equal(as.numeric(ANOVA(mpg ~ wt + cyl, mtcars, type = "Partial")["Df"][3,]), anova(lm(mpg ~ wt + cyl, mtcars))$"Df"[2])
   expect_equal(as.numeric(ANOVA(mpg ~ wt + cyl, mtcars, type = "Partial")["F value"][3,]), anova(lm(mpg ~ wt + cyl, mtcars))$"F value"[2])
   expect_equal(as.numeric(ANOVA(mpg ~ wt + cyl, mtcars, type = "Partial")["Pr(>F)"][3,]), anova(lm(mpg ~ wt + cyl, mtcars))$"Pr(>F)"[2])
-
 })

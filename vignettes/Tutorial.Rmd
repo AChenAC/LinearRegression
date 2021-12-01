@@ -14,13 +14,13 @@ knitr::opts_chunk$set(
 )
 ```
 
-The LinearRegression package aims to provide almost every piece of information needed for linear regression, except diagnostic. The `LR( )` function mimics the output from `lm( )`, `summary(lm( ))`, `confint( )`, `hatvalues(lm( ))`, `rstandard( )`, and `rstudent( )`. 
+The LinearRegression package aims to provide almost every piece of information needed for linear regression, except diagnostics. The `LR( )` function mimics the output from `lm( )`, `summary(lm( ))`, `confint( )`, `hatvalues(lm( ))`, `rstandard( )`, and `rstudent( )`. The `ANOVA( )` function mimics the output from `anova(lm( ))` function for sequential sums of squares and output from `car::Anova(lm( ), type="III")` function for partial sums of squares.
 
 ```{r setup}
 library(LinearRegression)
 ```
 
-Let's first demonstrate a few example of the use of `LR( )`.
+## Example of the using `LR( )` function. 
 
 ```{r}
 LR(mpg ~ cyl + wt, mtcars)
@@ -56,9 +56,11 @@ Next, let's demonstrate two more example with `LR( )` and compare it with the or
 
 _(a)_ Usage of `to.predict` parameter
 ```{r fig.align ='center', fig.width= 7, fig.height = 5, message=FALSE}
-MyPredict = LR(cyl ~ mpg + wt, mtcars, to.predict = matrix(c(mean(mtcars$mpg), 18, mean(mtcars$wt), 4), 2, 2))$predicted
+MyPredict = LR(cyl ~ mpg + wt, mtcars, 
+               to.predict = matrix(c(mean(mtcars$mpg), 18, mean(mtcars$wt), 4), 2, 2))$predicted
 print(MyPredict)
-RPredict = predict(lm(cyl~mpg+wt,mtcars), newdata=data.frame(mpg=c(mean(mtcars$mpg),18), wt = c(mean(mtcars$wt),4)))
+RPredict = predict(lm(cyl~mpg+wt,mtcars), newdata=data.frame(mpg=c(mean(mtcars$mpg),18), 
+                                                             wt = c(mean(mtcars$wt),4)))
 print(RPredict)
 all.equal(as.numeric(MyPredict), as.numeric(RPredict))
 #plot(mark(as.numeric(MyPredict), as.numeric(RPredict)))
@@ -78,10 +80,37 @@ all.equal(as.numeric(model2$CI), as.numeric(confint(model.r2)))
 
 Again, same numeric outputs from both functions. However, `LR( )` outperforms the built-in `r` function because we do not need to call another function to compute the confidence interval of the fitted model. 
 
+## Example of the using `ANOVA( )` function.
 
+We could choose either to obtain an ANOVA table for sequential sums of squares or partial sums of squares. 
 
+Note: `ANOVA( )` automatically fit the model with an intercept.
 
+_(a)_ Example of obtaining sequential sums of squares. 
 
+```{r}
+ANOVA(mpg ~ cyl + wt + disp, mtcars, type = "Sequential")
+anova(lm(mpg ~ cyl + wt + disp, mtcars))
+all.equal(as.numeric(unlist(ANOVA(mpg ~ cyl + wt, mtcars, type = "Sequential")["Df"])), 
+          anova(lm(mpg ~ cyl + wt, mtcars))$"Df")
+all.equal(as.numeric(unlist(ANOVA(mpg ~ cyl + wt, mtcars, type = "Sequential")["Sum Sq"])), 
+          anova(lm(mpg ~ cyl + wt, mtcars))$"Sum Sq")
+all.equal(as.numeric(unlist(ANOVA(mpg ~ cyl + wt, mtcars, type = "Sequential")["Mean Sq"])), 
+          anova(lm(mpg ~ cyl + wt, mtcars))$"Mean Sq")
+all.equal(as.numeric(unlist(ANOVA(mpg ~ cyl + wt, mtcars, type = "Sequential")["F value"])), 
+          anova(lm(mpg ~ cyl + wt, mtcars))$"F value")
+all.equal(as.numeric(unlist(ANOVA(mpg ~ cyl + wt, mtcars, type = "Sequential")["Pr(>F)"])), 
+          anova(lm(mpg ~ cyl + wt, mtcars))$"Pr(>F)")
+```
+
+From above, we have shown that `ANOVA( )` and built-in function `anova( )` output the same results via column-wise comparisons through `all.equal( )`. Since the output of `ANOVA( )` is a data.frame, we could access each column or row by its corresponding name.
+
+_(b)_ Example of obtaining partial sums of squares. 
+```{r}
+require("car")
+ANOVA(mpg ~ cyl + wt + disp, mtcars, type = "Partial")
+Anova(lm(mpg ~ cyl + wt + disp, mtcars))
+```
 
 
 

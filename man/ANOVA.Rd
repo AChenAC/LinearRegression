@@ -15,7 +15,7 @@ where outcome is the numeric response vector (which people usually denote as Y i
 \item{type}{the type of sums of squares to be obtained. Use "Sequential" for sequential sums of squares and "Partial" for partial sums of squares.}
 }
 \value{
-ANOVA returns ANOVA table in data.frame.
+ANOVA returns ANOVA table in a data.frame.
 }
 \description{
 ANOVA is used to obtain ANOVA table of a fitted model. It yields the same results as anova(lm( )) for sequential sums of squares
@@ -25,5 +25,6 @@ and car::Anova(lm( ), type="III") for partial sums of squares.
 
 ANOVA(mpg ~ cyl + wt, mtcars, type = "Partial") ## Get partial SS
 ANOVA(mpg ~ cyl + wt + disp, mtcars, type = "Sequential") ## Get sequential SS
+ANOVA(mpg ~ cyl + wt + disp, mtcars, type = "Sequential")["F value"] ## Extract F statistics from ANOVA table
 
 }

@@ -10,13 +10,14 @@
 #'
 #' @param type the type of sums of squares to be obtained. Use "Sequential" for sequential sums of squares and "Partial" for partial sums of squares.
 #'
-#' @return ANOVA returns ANOVA table in data.frame.
+#' @return ANOVA returns ANOVA table in a data.frame.
 #'
 #' @examples
 #'
 #' ANOVA(mpg ~ cyl + wt, mtcars, type = "Partial") ## Get partial SS
 #' ANOVA(mpg ~ cyl + wt + disp, mtcars, type = "Sequential") ## Get sequential SS
 #' ANOVA(mpg ~ cyl + wt + disp, mtcars, type = "Sequential")["F value"] ## Extract F statistics from ANOVA table
+#'
 #' @export
 #'
 #'
