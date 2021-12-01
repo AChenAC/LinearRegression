@@ -18,9 +18,9 @@ library("LinearRegression")
 ```
 
 ## Features 
-`LinearRegression::LR()` is used to fit simple linear regression or multiple linear regression with either including an intercept or without an intercept. The function does not explicitly return any output until you extract the desired output with `$`. Please refer to the help page `?LR` for more detailed features about this function. 
+`LinearRegression::LR()` is used to fit simple linear regression or multiple linear regression. You can decide whether to include an intercept or exclude the intercept with option `include.intercept` when fitting the model. The function does not explicitly present any output until you extract the desired output with `$` followed by its name. To learn more about items which could be extracted from this function, please refer to the help page via `?LR` for detailed information. 
 
-`LinearRegression::ANOVA()` is used to obtain ANOVA table. You can either choose to obtain sequential sums of squares ANOVA table or partial sums of squares ANOVA table. The output is in a data.frame. For more detailed usage about this function, please refer to the help page `?ANOVA`.
+`LinearRegression::ANOVA()` is used to obtain ANOVA table. You can either choose to obtain sequential sums of squares ANOVA table or partial sums of squares ANOVA table. The output is in a data.frame. For more detailed usage about this function, please refer to the help page via `?ANOVA`.
 
 
 ## Example
