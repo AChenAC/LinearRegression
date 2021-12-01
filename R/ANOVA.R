@@ -16,7 +16,7 @@
 #'
 #' ANOVA(mpg ~ cyl + wt, mtcars, type = "Partial") ## Get partial SS
 #' ANOVA(mpg ~ cyl + wt + disp, mtcars, type = "Sequential") ## Get sequential SS
-#'
+#' ANOVA(mpg ~ cyl + wt + disp, mtcars, type = "Sequential")["F value"] ## Extract F statistics from ANOVA table
 #' @export
 #'
 #'
