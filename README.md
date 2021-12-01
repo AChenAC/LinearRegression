@@ -22,8 +22,8 @@ library("LinearRegression")
 
 ## Example
 ```{r}
-LR(mpg ~ cyl + wt, mtcars)$coefficients
-ANOVA(mpg ~ cyl + wt + qsec, mtcars, type = "Partial")
+LR(mpg ~ cyl + wt, mtcars)$coefficients ## Fitting a model with intercept included and extract its coefficients
+ANOVA(mpg ~ cyl + wt + qsec, mtcars, type = "Sequential") ## Obtain sequential sums of squares 
 ```
 For more detailed tutorial and comparisons against the existing R function, please refer to the vignettes via the following code `browseVignettes(package = 'LinearRegression')`. 
 
