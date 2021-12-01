@@ -1,11 +1,10 @@
 Package: LinearRegression
 Type: Package
-Title: What the Package Does (Title Case)
+Title: Linear regression and ANOVA
 Version: 0.1.0
 Author: Aonan Chen
-Maintainer: The package maintainer <aonanc@umich.edu>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Maintainer: <aonanc@umich.edu>
+Description: Mimic the existing R function regarding linear regression and ANOVA. 
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
