@@ -10,7 +10,6 @@ The goal of LinearRegression is to mimic the existing R functions that are close
 ## Installation 
 Run the following code to install the package:
 ```{r}
-install.packages('devtools')
 devtools::install_github('AChenAC/LinearRegression', build_vignettes = T)
 library("LinearRegression")
 ```
@@ -26,5 +25,5 @@ library("LinearRegression")
 LR(mpg ~ cyl + wt, mtcars)$fstatistic
 ANOVA(mpg ~ cyl + wt + qsec, mtcars, type = "Partial")
 ```
-For more detailed tutorial and comparisons against the existing R function, please refer to the vignettes via the following code `browseVignettes(package = 'LinearRegression')`.
+For more detailed tutorial and comparisons against the existing R function, please refer to the vignettes via the following code `browseVignettes(package = 'LinearRegression')`. 
 
