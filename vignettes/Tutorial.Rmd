@@ -94,10 +94,10 @@ anova(lm(mpg ~ cyl + wt + disp, mtcars))
 MyNumeric = as.numeric(unlist(ANOVA(mpg ~ cyl + wt, mtcars, type = "Sequential")))
 RNumeric = as.numeric(unlist(anova(lm(mpg ~ cyl + wt, mtcars))))
 all.equal(MyNumeric, RNumeric)
-plot(mark(MyNumeric, RNumeric))
+plot(mark(as.numeric(unlist(ANOVA(mpg ~ cyl + wt, mtcars, type = "Sequential"))), as.numeric(unlist(anova(lm(mpg ~ cyl + wt, mtcars))))))
 ```
 
-From above, we have shown that `ANOVA( )` and built-in function `anova( )` output the same numeric results via `all.equal( )`. `ANOVA( )` slightly outperforms `anova( )` in terms of speed. 
+From above, we have shown that `ANOVA( )` and built-in function `anova( )` output the same numeric results via `all.equal( )`. `ANOVA( )` actually outperforms `anova( )` in terms of speed.
 
 #### _(b)_ Example of obtaining partial sums of squares. 
 ```{r fig.align ='center', fig.width= 7, fig.height = 5, message=FALSE}
@@ -107,10 +107,10 @@ Anova(lm(mpg ~ cyl + wt + disp, mtcars), type = "III")
 MyNumeric = as.numeric(unlist(ANOVA(mpg ~ cyl + wt + disp, mtcars, type = "Partial")))
 RNumeric = as.numeric(unlist(Anova(lm(mpg ~ cyl + wt + disp, mtcars), type = "III")))
 all.equal(MyNumeric, RNumeric)
-plot(mark(MyNumeric, RNumeric))
+plot(mark(as.numeric(unlist(ANOVA(mpg ~ cyl + wt + disp, mtcars, type = "Partial"))), as.numeric(unlist(Anova(lm(mpg ~ cyl + wt + disp, mtcars), type = "III")))))
 ```
 
-Again, we have shown that `ANOVA( )` and original `r` function `Anova( )` in cars package output the same numeric results via `all.equal( )`. In this case, both function performs equally good. 
+Again, we have shown that `ANOVA( )` and original `r` function `Anova( )` in cars package output the same numeric results via `all.equal( )`. `ANOVA( )` is more efficient than `anova( )` in terms of speed.
 
 Tips: Since `ANOVA( )` outputs a data.frame, we can indexing or selecting desired element with all means of data.frame such as `ANOVA(mpg ~ cyl + wt + disp, mtcars, type = "Sequential")["Sum Sq"]`.
 
